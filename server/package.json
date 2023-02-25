@@ -4,8 +4,37 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write .",
+    "lint": "eslint --fix .",
+    "check": "eslint . && prettier --check .",
+    "predev": "node ./swagger.js",
+    "dev": "npm run format && npm run lint && NODE_ENV=development nodemon ./main.js",
+    "prestart": "node ./swagger.js",
+    "start": "NODE_ENV=production node ./main.js",
+    "test": "NODE_ENV=production node tests/*"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.10.0",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.4"
+  }
 }
