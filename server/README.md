@@ -24,4 +24,4 @@ The server will run on []()
 
 ## Deployment
 
-The project is deployed using Deta Cloud
+The project is deployed using Heroku

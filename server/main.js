@@ -17,18 +17,15 @@ const port = config.port || 8080;
 // require("./src/middlewares/passport.middleware");
 
 mongoose.Promise = global.Promise;
+mongoose.set('strictQuery', true);
 
 mongoose
   .connect(config.mongodbUri, { useNewUrlParser: true })
-  // eslint-disable-next-line no-console
   .then(() => console.log('Successfully connected to the database'))
   .catch((err) => {
-    // eslint-disable-next-line no-console
     console.log('Could not connect to the database. Error: ', err);
     process.exit();
   });
-
-mongoose.set('strictQuery', true);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -49,6 +46,5 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc));
 app.use('/', router);
 
 app.listen(port, () => {
-  // eslint-disable-next-line no-console
   console.log('Server running on port: ', port);
 });
