@@ -6,11 +6,9 @@ const getProfile = (req, res) => {
   });
 };
 
-const updateProfile = (req, res) => {
-};
+const updateProfile = (req, res) => {};
 
-const deleteProfile = (req, res) => {
-};
+const deleteProfile = (req, res) => {};
 
 module.exports = {
   getProfile,

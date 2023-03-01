@@ -12,5 +12,7 @@ module.exports = {
   rules: {
     'no-console': 'off',
     camelcase: 'off',
+    'no-underscore-dangle': 'off',
+    'no-unused-vars': 'off',
   },
 };

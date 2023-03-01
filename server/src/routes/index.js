@@ -26,9 +26,11 @@ router.get('/', (req, res) => res.status(200).json({ message: 'The server is run
 router.get(
   '/auth/spotify',
   passport.authenticate('spotify', {
-    scope: ['user-read-email', 'user-read-private']}), (req, res) => {
-      spotify.setAccessToken(req.user.accessToken);
-    },
+    scope: ['user-read-email', 'user-read-private'],
+  }),
+  (req, res) => {
+    spotify.setAccessToken(req.user.accessToken);
+  },
 );
 
 /*
@@ -40,7 +42,7 @@ router.get(
 */
 router.get(
   '/auth/spotify/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  passport.authenticate('spotify'),
   (req, res) => {
     spotify.setAccessToken(req.user.accessToken);
     res.redirect('/profile');
