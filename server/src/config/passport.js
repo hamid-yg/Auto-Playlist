@@ -17,7 +17,7 @@ passport.use(
     {
       clientID: config.SPOTIFY_CLIENT_ID,
       clientSecret: config.SPOTIFY_CLIENT_SECRET,
-      callbackURL: 'http://localhost:8080/auth/spotify/callback',
+      callbackURL: 'https://auto-playlist.herokuapp.com/auth/spotify/callback',
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ spotifyId: profile.id }, (err, user) => {
