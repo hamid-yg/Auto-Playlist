@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('../config/passport');
 
 const router = express.Router();
+const spotify = require('../config/spotify');
 
 /*
   #swagger.summary = 'Main Route'
@@ -25,8 +26,9 @@ router.get('/', (req, res) => res.status(200).json({ message: 'The server is run
 router.get(
   '/auth/spotify',
   passport.authenticate('spotify', {
-    scope: ['user-read-email', 'user-read-private'],
-  }),
+    scope: ['user-read-email', 'user-read-private']}), (req, res) => {
+      spotify.setAccessToken(req.user.accessToken);
+    },
 );
 
 /*
@@ -40,12 +42,15 @@ router.get(
   '/auth/spotify/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   (req, res) => {
+    spotify.setAccessToken(req.user.accessToken);
     res.redirect('/profile');
   },
 );
 
 router.get('/profile', (req, res) => {
-  res.status(200).json({ message: 'I got the profile!' });
+  spotify.getMe().then((data) => {
+    res.status(200).json(data.body);
+  });
 });
 
 module.exports = router;
