@@ -7,19 +7,19 @@ const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
 const swaggerJsDoc = require('./swagger-output.json');
 
-// const passport = require("./src/passport/passport");
-const envs = require('./src/config/config');
+const passport = require('./src/config/passport');
+const config = require('./src/config/config');
 const router = require('./src/routes/index');
 
 const app = express();
-const port = envs.port || 8080;
+const port = config.port || 8080;
 
 // require("./src/middlewares/passport.middleware");
 
 mongoose.Promise = global.Promise;
 
 mongoose
-  .connect(envs.mongodbUri, { useNewUrlParser: true })
+  .connect(config.mongodbUri, { useNewUrlParser: true })
   // eslint-disable-next-line no-console
   .then(() => console.log('Successfully connected to the database'))
   .catch((err) => {
@@ -35,15 +35,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(
   session({
-    secret: envs.secret,
+    secret: config.secret,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: envs.mongodbUri }),
+    store: MongoStore.create({ mongoUrl: config.mongodbUri }),
   }),
 );
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc));
 app.use('/', router);

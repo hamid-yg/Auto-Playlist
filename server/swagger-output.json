@@ -35,6 +35,20 @@
           }
         }
       }
+    },
+    "/auth/spotify": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/auth/spotify/callback": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   },
   "definitions": {
