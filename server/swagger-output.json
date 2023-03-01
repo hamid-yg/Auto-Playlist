@@ -1,0 +1,92 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "AutoPlaylist API",
+    "version": "1.0.0",
+    "description": "AutoPlaylist API",
+    "termsOfService": "http://www.github.com/blacky-yg/Auto-Playlist",
+    "contact": {
+      "name": "Auto Team",
+      "url": "http://www.github.com/blacky-yg/Auto-Playlist",
+      "email": ""
+    }
+  },
+  "host": "localhost:8080",
+  "servers": [
+    {
+      "url": "",
+      "description": "AutoPlaylist API"
+    }
+  ],
+  "basePath": "/",
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "type": "basic",
+    "in": "header"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/spotify": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/auth/spotify/callback": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/profile": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "number",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Hamidou TESSILIMI"
+        },
+        "email": {
+          "type": "string",
+          "example": "hamidtessilimi@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "1234"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "12/07/1996"
+        }
+      }
+    }
+  }
+}
