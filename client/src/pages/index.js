@@ -9,6 +9,9 @@ export default function HomePage() {
         <Link href="/">Home</Link>
       </li>
       <li>
+        <Link href="/landing">Landing</Link>
+      </li>
+      <li>
         <Link href="/login">Login</Link>
       </li>
       <li>

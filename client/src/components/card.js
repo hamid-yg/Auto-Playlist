@@ -1,23 +1,50 @@
 import React from 'react';
-import { Card, CardHeader, Heading, Image, CardBody, CardFooter, Button, Text } from "@chakra-ui/react";
+import { Card, CardHeader, Heading, Image, CardBody, CardFooter, Button, Text, Stack, Box } from "@chakra-ui/react";
+import { DeleteIcon } from '@chakra-ui/icons';
 
-export default function CardDetails() {
+
+function Item ({key, title, author, isIcon, img, color}) {
+
   return (
-    <Card>
+    <Stack direction='row' key={key} mb={4}>
+      <Image
+        boxSize='40px'
+        objectFit='cover'
+        src={img}
+        alt='Dan Abramov'
+      />
+      <Box>
+        <Heading size='xs' color={color} textTransform='uppercase'>
+          {title}
+        </Heading>
+        <Text fontSize='sm' color={color}>
+          {author}
+        </Text>
+      </Box>
+      {
+        isIcon ? <DeleteIcon/> : <></>
+      }
+    </Stack>
+  )
+}
+
+function CardDetails({title, nb, tab}) {
+
+  return (
+    <Card align='center' colorScheme={"teal"} borderRadius={16} height={'sm'}>
       <CardHeader>
-        <Heading size='xs'>Playlist name</Heading>
-          <Image
-          src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-          alt='Green double couch with wooden legs'
-          borderRadius='lg'
-        />
+          <Heading size='md'>{title} - {nb}</Heading>
       </CardHeader>
-      <CardBody>
-        <Text>View a summary of all your customers over the last month.</Text>
+      <CardBody overflowY="auto">
+      { tab.map((item, index) => (
+        <Item key={index} title={item.title} img={item.img} author={item.author} isIcon={true}/>
+        )) }
       </CardBody>
       <CardFooter>
-        <Button>View here</Button>
+          <Button bgColor={"#e9f2e9"}>Delete playlist</Button>
       </CardFooter>
     </Card>
   )
 };
+
+export { CardDetails, Item };
