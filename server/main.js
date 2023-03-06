@@ -14,8 +14,6 @@ const router = require('./src/routes/index');
 const app = express();
 const port = config.port || 8080;
 
-// require("./src/middlewares/passport.middleware");
-
 mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true);
 

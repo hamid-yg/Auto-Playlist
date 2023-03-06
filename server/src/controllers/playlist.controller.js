@@ -3,6 +3,7 @@ const spotify = require('../config/spotify');
 const getPlaylist = async (req, res) => {
   const { id } = req.params;
   try {
+    spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
     const data = await spotify.getPlaylist(id);
     res.status(200).json(data.body);
   } catch (error) {
@@ -12,14 +13,17 @@ const getPlaylist = async (req, res) => {
 
 const getPlaylists = async (req, res) => {
   try {
+    spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
     const data = await spotify.getUserPlaylists();
     res.status(200).json(data.body);
   } catch (error) {
+    console.log(error);
     res.status(400).json(error);
   }
 };
 
 const getPlaylistTracks = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { id } = req.params;
   try {
     const data = await spotify.getPlaylistTracks(id);
@@ -29,17 +33,8 @@ const getPlaylistTracks = async (req, res) => {
   }
 };
 
-const getPlaylistCover = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const data = await spotify.getPlaylistCoverImage(id);
-    res.status(200).json(data.body);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
 const createPlaylist = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { name, description, _public } = req.body;
   try {
     const data = await spotify.createPlaylist(name, {
@@ -53,6 +48,7 @@ const createPlaylist = async (req, res) => {
 };
 
 const addTracksToPlaylist = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { id } = req.params;
   const { tracks } = req.body;
   try {
@@ -64,6 +60,7 @@ const addTracksToPlaylist = async (req, res) => {
 };
 
 const removeTracksFromPlaylist = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { id } = req.params;
   const { tracks } = req.body;
   try {
@@ -75,6 +72,7 @@ const removeTracksFromPlaylist = async (req, res) => {
 };
 
 const changePlaylistDetails = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { id } = req.params;
   const { name, description, _public } = req.body;
   try {
@@ -90,6 +88,7 @@ const changePlaylistDetails = async (req, res) => {
 };
 
 const reorderPlaylistTracks = async (req, res) => {
+  spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
   const { id } = req.params;
   const { range_start, range_length, insert_before } = req.body;
   try {
@@ -105,49 +104,13 @@ const reorderPlaylistTracks = async (req, res) => {
   }
 };
 
-const replacePlaylistTracks = async (req, res) => {
-  const { id } = req.params;
-  const { tracks } = req.body;
-  try {
-    const data = await spotify.replacePlaylistTracks(id, tracks);
-    res.status(200).json(data.body);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
-const getPlaylistCoverImage = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const data = await spotify.getPlaylistCoverImage(id);
-    res.status(200).json(data.body);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
-const uploadCustomPlaylistCoverImage = async (req, res) => {
-  const { id } = req.params;
-  const { image } = req.body;
-  try {
-    const data = await spotify.uploadCustomPlaylistCoverImage(id, image);
-    res.status(200).json(data.body);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-};
-
 module.exports = {
   getPlaylist,
   getPlaylists,
   getPlaylistTracks,
-  getPlaylistCover,
   createPlaylist,
   addTracksToPlaylist,
   removeTracksFromPlaylist,
   changePlaylistDetails,
   reorderPlaylistTracks,
-  replacePlaylistTracks,
-  getPlaylistCoverImage,
-  uploadCustomPlaylistCoverImage,
 };
