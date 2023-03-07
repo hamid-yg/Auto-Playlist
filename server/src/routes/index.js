@@ -48,16 +48,19 @@ router.get(
   #swagger.responses[200] = {
   }
 */
-router.get(
-  '/auth/spotify/callback',
-  passport.authenticate('spotify'),
-  (req, res) => {
-    // res.cookie('accessToken', req.user.accessToken, { httpOnly: true });
-    // spotify.setAccessToken(req.user.accessToken);
-    // res.redirect('/profile');
-  },
-);
+// router.get(
+//   '/auth/spotify/callback',
+//   passport.authenticate('spotify'),
+//   (req, res) => {
+//     // res.cookie('accessToken', req.user.accessToken, { httpOnly: true });
+//     // spotify.setAccessToken(req.user.accessToken);
+//     // res.redirect('/profile');
+//   },
+// );
 
+router.get("/auth/spotify/callback", (req, res) => {
+  res.redirect("http://localhost:3000");
+});
 /*
   #swagger.summary = 'Get Spotify Profile'
   #swagger.description = 'Get Spotify Profile'
