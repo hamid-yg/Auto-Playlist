@@ -59,7 +59,7 @@ router.get(
 // );
 
 router.get("/auth/spotify/callback", (req, res) => {
-  res.redirect("http://localhost:3000");
+  res.redirect("http://localhost:3000/dashboard");
 });
 /*
   #swagger.summary = 'Get Spotify Profile'
