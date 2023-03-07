@@ -52,9 +52,9 @@ router.get(
   '/auth/spotify/callback',
   passport.authenticate('spotify'),
   (req, res) => {
-    res.cookie('accessToken', req.user.accessToken, { httpOnly: true });
-    spotify.setAccessToken(req.user.accessToken);
-    res.redirect('/profile');
+    // res.cookie('accessToken', req.user.accessToken, { httpOnly: true });
+    // spotify.setAccessToken(req.user.accessToken);
+    // res.redirect('/profile');
   },
 );
 
