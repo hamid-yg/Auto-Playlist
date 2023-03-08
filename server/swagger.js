@@ -1,7 +1,7 @@
 const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
-  host: 'localhost:8080',
+  host: 'https://auto-playlist.herokuapp.com/docs',
   info: {
     title: 'AutoPlaylist API',
     version: '1.0.0',
@@ -15,8 +15,18 @@ const doc = {
   },
   servers: [
     {
-      url: '',
+      url: 'https://auto-playlist.herokuapp.com/docs',
       description: 'AutoPlaylist API',
+    },
+  ],
+  tags: [
+    {
+      name: 'User',
+      description: 'Authentication routes',
+    },
+    {
+      name: 'Playlist',
+      description: 'Playlist routes',
     },
   ],
   schemes: ['http'],
@@ -29,14 +39,24 @@ const doc = {
       _id: 1,
       name: 'Hamidou TESSILIMI',
       email: 'hamidtessilimi@gmail.com',
-      password: '1234',
-      created_at: '12/07/1996',
+      access_token: 'access_token',
+      refresh_token: 'refresh_token',
+    },
+    Playlist: {
+      _id: 1,
+      name: 'Playlist name',
+      description: 'Playlist description',
+      _public: true,
     },
   },
 };
 
 const outputFile = './swagger-output.json';
-const endpointsFiles = ['./main.js'];
+const endpointsFiles = [
+  './main.js',
+  './src/routes/index.js',
+  './src/routes/playlist.router.js',
+];
 
 /* NOTE: if you use the express Router, you must pass in the
    'endpointsFiles' only the root file where the route starts,

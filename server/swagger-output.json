@@ -11,14 +11,24 @@
       "email": ""
     }
   },
-  "host": "localhost:8080",
+  "host": "https://auto-playlist.herokuapp.com/docs",
   "servers": [
     {
-      "url": "",
+      "url": "https://auto-playlist.herokuapp.com/docs",
       "description": "AutoPlaylist API"
     }
   ],
   "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Authentication routes"
+    },
+    {
+      "name": "Playlist",
+      "description": "Playlist routes"
+    }
+  ],
   "schemes": ["http"],
   "securityDefinitions": {
     "type": "basic",
@@ -32,6 +42,40 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "_public": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -57,6 +101,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -68,25 +115,151 @@
         "responses": {}
       }
     },
-    "/users/": {
+    "/{id}": {
       "get": {
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
-      },
+      }
+    },
+    "/{id}/info": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/{id}/add": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracks": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/{id}/update": {
       "put": {
         "description": "",
-        "parameters": [],
-        "responses": {}
-      },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "_public": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/{id}/delete": {
       "delete": {
         "description": "",
-        "parameters": [],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracks": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     }
   },
@@ -106,13 +279,34 @@
           "type": "string",
           "example": "hamidtessilimi@gmail.com"
         },
-        "password": {
+        "access_token": {
           "type": "string",
-          "example": "1234"
+          "example": "access_token"
         },
-        "created_at": {
+        "refresh_token": {
           "type": "string",
-          "example": "12/07/1996"
+          "example": "refresh_token"
+        }
+      }
+    },
+    "Playlist": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "number",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Playlist name"
+        },
+        "description": {
+          "type": "string",
+          "example": "Playlist description"
+        },
+        "_public": {
+          "type": "boolean",
+          "example": true
         }
       }
     }

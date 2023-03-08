@@ -1,12 +1,13 @@
 const express = require('express');
-const passport = require('../config/passport');
 
 const router = express.Router();
+
 const spotify = require('../config/spotify');
+const passport = require('../config/passport');
 const playlistRouter = require('./playlist.router');
-const userRouter = require('./user.router');
 
 /*
+  #swagger.tags = ['Main']
   #swagger.summary = 'Main Route'
   #swagger.description = 'Main Route'
   #swagger.responses[200] = {
@@ -19,9 +20,13 @@ const userRouter = require('./user.router');
 router.get('/', (req, res) => res.status(200).json({ message: 'The server is running successfully!' }));
 
 /*
+  #swagger.tags = ['Authentication']
   #swagger.summary = 'Spotify Auth'
   #swagger.description = 'Spotify Auth'
   #swagger.responses[200] = {
+    schema: {
+      message: 'Redirecting to Spotify...'
+    }
   }
 */
 router.get(
@@ -43,47 +48,67 @@ router.get(
 );
 
 /*
+  #swagger.tags = ['User']
   #swagger.summary = 'Spotify Auth Callback'
   #swagger.description = 'Spotify Auth Callback'
   #swagger.responses[200] = {
+    schema: {
+      message: 'Redirecting to dashboard...'
+    }
   }
 */
-// router.get(
-//   '/auth/spotify/callback',
-//   passport.authenticate('spotify'),
-//   (req, res) => {
-//     // res.cookie('accessToken', req.user.accessToken, { httpOnly: true });
-//     // spotify.setAccessToken(req.user.accessToken);
-//     // res.redirect('/profile');
-//   },
-// );
+router.get(
+  '/auth/spotify/callback',
+  passport.authenticate('spotify'),
+  (req, res) => {
+    spotify.setAccessToken(req.user.accessToken);
+    res.redirect('http://auto-playlist.vercel.app/dashboard');
+  },
+);
 
-router.get("/auth/spotify/callback", (req, res) => {
-  res.redirect("http://localhost:3000/dashboard");
-});
 /*
+  #swagger.tags = ['User']
   #swagger.summary = 'Get Spotify Profile'
   #swagger.description = 'Get Spotify Profile'
-  #swagger.responses[200] = {
-    description: '',
+  #swagger.parameters['token'] = {
+    in: 'header',
+    description: 'Access token',
+    required: true,
+    type: 'string'
+  }
+  #swagger.responses[401] = {
+    description: 'Unauthorized',
     schema: {
-      message: ''
+      message: 'Unauthorized'
+    }
+  }
+  #swagger.responses[200] = {
+    description: 'Spotify Profile',
+    schema: {
+      message: 'Spotify Profile',
+      data: body
     }
   }
 */
 router.get('/profile', (req, res) => {
-  spotify.getMe().then((data) => {
-    res.status(200).json(data.body);
-  });
+  spotify.setAccessToken(req.user.accessToken);
+  try {
+    spotify.getMe().then((data) => {
+      res.status(200).json({ message: 'Spotify Profile', data: data.body });
+    });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
 });
 
 /*
+  #swagger.tags = ['User']
   #swagger.summary = 'Logout'
   #swagger.description = 'Logout'
   #swagger.responses[200] = {
-    description: '',
+    description: 'Logout',
     schema: {
-      message: ''
+      message: 'Successfully logged out'
     }
   }
 */
@@ -92,8 +117,33 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
-router.use('/playlists', playlistRouter);
-
-router.use('/users', userRouter);
+/*
+  #swagger.tags = ['Playlist']
+  #swagger.summary = 'All Routes'
+  #swagger.description = 'All Routes'
+  #swagger.parameters['token'] = {
+    in: 'header',
+    description: 'Access token',
+    required: true,
+    type: 'string'
+  }
+  #swagger.responses[401] = {
+    description: 'Unauthorized',
+    schema: {
+      message: 'Unauthorized'
+    }
+  }
+*/
+router.use(
+  '/playlists',
+  (req, res, next) => {
+    if (!req.headers.authorization) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
+    next();
+  },
+  playlistRouter,
+);
 
 module.exports = router;
