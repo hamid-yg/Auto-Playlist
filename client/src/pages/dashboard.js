@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SimpleGrid, Box, Text, Flex, Input, Stack, Avatar, Button} from "@chakra-ui/react";
 import {CardDetails, Item} from '../components/card';
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import axios from 'axios';
+import { getTokenFromUrl, loginUrl } from './Login/spotify';
+import SpotifyWebApi from 'spotify-web-api-js';
 
 
 const titre = 'Playlist name';
@@ -18,7 +21,52 @@ const Playlist = [
   { title: "J'aime Bien!", img: "data:image/jpeg;base64,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", author : "Josman" },
 ];
 
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+};
+
 const Dashboard = () => {
+  const [token, setToken] = useState("");
+  const [playlists, setPlaylists] = useState([]);
+  const [userInfo, setUserInfo] = useState();
+
+  var spotify = new SpotifyWebApi();
+    // {
+    // clientId: '9c774d60d9fe4fae99abdd3eca6ee553',
+    // clientSecret: '186967ee1e144445874b6d218715233a',
+    // redirectUri: 'https://auto-playlist.herokuapp.com/auth/spotify/callback'
+  // });
+
+  console.log(loginUrl);
+
+  useEffect( () => {
+    const spotifyToken = getTokenFromUrl().access_token;
+    window.location.hash = "";
+
+    
+    if (spotifyToken) {
+      const config = {
+        headers: { Authorization: `Bearer ${spotifyToken}` }
+      };
+      setToken(spotifyToken)
+      globalThis.config;
+      }
+      axios.get("http://https://auto-playlist.herokuapp.com/profile", config).then((response) => {
+        setUserInfo(response.data);
+        console.log(response.data);
+      }).catch((e) => {
+        console.log(e);
+      });
+      axios.get("http://https://auto-playlist.herokuapp.com/playslits", config).then((response) => {
+        setPlaylists(response.data);
+        console.log(response.data);
+      }).catch((e) => {
+        console.log(e);
+      });
+    
+  }, [token])
+
+
   return (
     <Box>
       <Flex bg='#111'>
@@ -41,7 +89,7 @@ const Dashboard = () => {
         <Stack width='full' bgColor='#343438' align='center' px={4}>
             <Text fontSize='2xl' color={"white"}>Playlist</Text>
             <Box overflowY="auto">
-            <SimpleGrid spacing={4} columns={{md: 2, lg: 3, '2xl': 4}} >
+            <SimpleGrid spacing={4} columns={{md: 2, lg: 3, '2xl': 5}} >
               <CardDetails title={titre} nb={nombre} tab={Playlist}/>
               <CardDetails title={titre} nb={nombre} tab={Playlist}/>
               <CardDetails title={titre} nb={nombre} tab={Playlist}/>

@@ -1,17 +1,7 @@
-import { useState } from 'react';
-import { Box, Button, Image, Stack } from "@chakra-ui/react";
-import axios from 'axios';
-
+import { Box, Button } from "@chakra-ui/react";
+import { loginUrl } from './Login/spotify';
 
 const Login = () => {
-  const setState = useState([]);
-
-  const handleLoginClick = async () => {
-    const data = await axios.get('https://auto-playlist.herokuapp.com/auth/spotify');
-    console.log(data);
-    setState(data);
-  };
-
   return (
     <Box
       minH="100vh"
@@ -32,7 +22,7 @@ const Login = () => {
           w={{ base: "90%", md: "400px" }}
           textAlign="center"
         >
-          <Button colorScheme="whiteAlpha" onClick={handleLoginClick}>Log in with Spotify</Button>
+          <Button colorScheme="whiteAlpha"><a href={loginUrl}>Log in with Spotify</a></Button>
         </Box>
     </Box>
   );
