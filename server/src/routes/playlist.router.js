@@ -209,7 +209,7 @@ playlistRouter.post('/:id/add', playlistController.addTracksToPlaylist);
     }
   }
 */
-playlistRouter.put('/:id/update', playlistController.changePlaylistDetails);
+playlistRouter.put('/:id', playlistController.changePlaylistDetails);
 
 /*
   #swagger.tags = ['Playlists']
@@ -255,7 +255,7 @@ playlistRouter.put('/:id/update', playlistController.changePlaylistDetails);
   }
 */
 playlistRouter.delete(
-  '/:id/delete',
+  '/:id',
   playlistController.removeTracksFromPlaylist,
 );
 

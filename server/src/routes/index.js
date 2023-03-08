@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
+const User = require('../models/user.model');
 const spotify = require('../config/spotify');
 const passport = require('../config/passport');
 const playlistRouter = require('./playlist.router');
@@ -91,10 +92,18 @@ router.get(
   }
 */
 router.get('/profile', (req, res) => {
-  spotify.setAccessToken(req.user.accessToken);
   try {
-    spotify.getMe().then((data) => {
-      res.status(200).json({ message: 'Spotify Profile', data: data.body });
+    const token = req.headers.authorization.split(' ')[1];
+    spotify.setAccessToken(token);
+    User.findOne({ accessToken: token }).then((user) => {
+      if (!user) {
+        res.status(401).json({ message: 'Unauthorized' });
+      }
+      spotify.getMe().then((data) => {
+        res.status(200).json({ message: 'Spotify Profile', data: data.body, user: user });
+      }).catch((error) => {
+        res.status(401).json({ message: 'Unauthorized', error: error });
+      });
     });
   } catch (error) {
     res.status(500).json({ message: error });
@@ -140,8 +149,13 @@ router.use(
     if (!req.headers.authorization) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    spotify.setAccessToken(req.headers.authorization.split(' ')[1]);
-    next();
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      spotify.setAccessToken(token);
+      next();
+    } catch (error) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
   },
   playlistRouter,
 );

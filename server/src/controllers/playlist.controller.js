@@ -15,8 +15,10 @@ const getPlaylists = async (req, res) => {
     const data = await spotify.getUserPlaylists();
     res.status(200).json(data.body);
   } catch (error) {
-    console.log(error);
-    res.status(400).json(error);
+    res.status(401).json({
+      message: 'Error getting playlists',
+      error,
+    });
   }
 };
 
@@ -75,6 +77,7 @@ const changePlaylistDetails = async (req, res) => {
       data: data.body,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).json(error);
   }
 };
