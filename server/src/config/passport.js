@@ -30,6 +30,7 @@ passport.use(
             displayName: profile.displayName,
             email: profile.emails[0].value,
           });
+          console.log(accessToken)
           newUser.save((error) => {
             if (error) console.log(error);
             return done(error, newUser);

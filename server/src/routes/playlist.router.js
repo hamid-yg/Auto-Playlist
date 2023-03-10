@@ -254,9 +254,6 @@ playlistRouter.put('/:id', playlistController.changePlaylistDetails);
     }
   }
 */
-playlistRouter.delete(
-  '/:id',
-  playlistController.removeTracksFromPlaylist,
-);
+playlistRouter.delete('/:id', playlistController.removeTracksFromPlaylist);
 
 module.exports = playlistRouter;

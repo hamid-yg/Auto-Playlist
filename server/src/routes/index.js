@@ -99,11 +99,16 @@ router.get('/profile', (req, res) => {
       if (!user) {
         res.status(401).json({ message: 'Unauthorized' });
       }
-      spotify.getMe().then((data) => {
-        res.status(200).json({ message: 'Spotify Profile', data: data.body, user: user });
-      }).catch((error) => {
-        res.status(401).json({ message: 'Unauthorized', error: error });
-      });
+      spotify
+        .getMe()
+        .then((data) => {
+          res
+            .status(200)
+            .json({ message: 'Spotify Profile', data: data.body, user });
+        })
+        .catch((error) => {
+          res.status(401).json({ message: 'Unauthorized', error });
+        });
     });
   } catch (error) {
     res.status(500).json({ message: error });
