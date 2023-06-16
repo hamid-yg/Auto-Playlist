@@ -167,7 +167,7 @@ playlistRouter.post('/', playlistController.createPlaylist);
     }
   }
 */
-playlistRouter.post('/:id/add', playlistController.addTracksToPlaylist);
+playlistRouter.post('/:id', playlistController.addTracksToPlaylist);
 
 /*
   #swagger.tags = ['Playlists']

@@ -62,6 +62,7 @@ router.get(
   '/auth/spotify/callback',
   passport.authenticate('spotify'),
   (req, res) => {
+    console.log(req.user.accessToken);
     spotify.setAccessToken(req.user.accessToken);
     res.redirect('http://auto-playlist.vercel.app/dashboard');
   },
@@ -95,21 +96,13 @@ router.get('/profile', (req, res) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     spotify.setAccessToken(token);
-    User.findOne({ accessToken: token }).then((user) => {
-      if (!user) {
-        res.status(401).json({ message: 'Unauthorized' });
-      }
-      spotify
-        .getMe()
-        .then((data) => {
-          res
-            .status(200)
-            .json({ message: 'Spotify Profile', data: data.body, user });
-        })
-        .catch((error) => {
-          res.status(401).json({ message: 'Unauthorized', error });
-        });
-    });
+    spotify
+      .getMe()
+      .then((data) => {
+        res
+          .status(200)
+          .json({ message: 'Spotify Profile', data: data.body });
+      })
   } catch (error) {
     res.status(500).json({ message: error });
   }
